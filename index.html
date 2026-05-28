@@ -705,7 +705,22 @@ function initFBSync(){
     const ex=snap.val(),list=ex?Object.values(ex):[];resetState();list.forEach(m=>applyMv(m.move,m.promotion||null));renderAll();
     const keys=ex?Object.keys(ex):[];const last=keys.length>0?keys[keys.length-1]:null;
     const q=last?mvRef.orderByKey().startAfter(last):mvRef.orderByKey();
-    q.on('child_added',snap=>{const d=snap.val();if(d.by===myRole)return;animateMove(d.move,()=>{applyMv(d.move,d.promotion||null);renderAll();});});
+    q.on('child_added',snap=>{
+      const d=snap.val();if(d.by===myRole)return;
+      const mv=d.move;
+      // phát hiện ăn quân ở phía nhận (bàn cờ chưa áp dụng nước này)
+      const p=board[mv.from[0]][mv.from[1]];
+      const target=board[mv.to[0]][mv.to[1]];
+      const isEP=p&&p.toUpperCase()==='P'&&mv.from[1]!==mv.to[1]&&!target;
+      const defender=target||(isEP?board[mv.from[0]][mv.to[1]]:null);
+      const apply=()=>animateMove(mv,()=>{applyMv(mv,d.promotion||null);renderAll();});
+      if(defender&&_clips.length>0){
+        const ci=(capW.length+capB.length)%_clips.length;  // cùng công thức -> cùng clip
+        playBattleVideo(p,defender,apply,ci);
+      }else{
+        apply();
+      }
+    });
   });
   matchRef.child('result').on('value',snap=>{const d=snap.val();if(!d||over)return;over=true;showResult(d.winner||null,d.reason,myRole==='spectator');});
   matchRef.child('drawOffer').on('value',snap=>{const d=snap.val();if(!d||d.from===myRole||over)return;if(confirm('🤝 Đối thủ xin hoà. Đồng ý?')){matchRef.child('drawOffer').remove();endGame(null,'Đồng ý hoà bàn');}else{matchRef.child('drawOffer').remove();const btn=document.getElementById('btn-draw');btn.textContent='🤝 Xin hoà';btn.disabled=false;}});
@@ -767,13 +782,15 @@ const BATTLE_CLIPS = [
 _clips = BATTLE_CLIPS.map(c => /^https?:\/\//.test(c) ? c : BATTLES_BASE + c);
 console.log('[Battle] ' + _clips.length + ' clips loaded');
 
-function playBattleVideo(attackerPiece,defenderPiece,onDone){
+function playBattleVideo(attackerPiece,defenderPiece,onDone,clipIndex){
   if(_clips.length===0){onDone();return;}
   if(_battleActive){onDone();return;}
   _battleActive=true;
   _battleCallback=onDone;
 
-  const url=_clips[Math.floor(Math.random()*_clips.length)];
+  // dùng clipIndex được truyền vào (để 2 bên xem cùng 1 clip); nếu không có thì random
+  const idx=(typeof clipIndex==='number'&&clipIndex>=0&&clipIndex<_clips.length)?clipIndex:Math.floor(Math.random()*_clips.length);
+  const url=_clips[idx];
   const overlay=document.getElementById('battle-video-overlay');
   const videoEl=document.getElementById('battle-video');
   const vsEl=document.getElementById('battle-vs');
@@ -849,8 +866,9 @@ execMove=function(mv){
   const defender=target||epTarget;
   const needP=(p==='P'&&mv.to[0]===0)||(p==='p'&&mv.to[0]===7);
   if(defender&&_clips.length>0){
-    if(needP){showPromo(p,pr=>{mv.promotion=pr;playBattleVideo(p,defender,()=>finishMove(mv));});}
-    else{playBattleVideo(p,defender,()=>finishMove(mv));}
+    const ci=(capW.length+capB.length)%_clips.length;  // clip tuần tự theo số lần ăn quân (đồng bộ sẵn)
+    if(needP){showPromo(p,pr=>{mv.promotion=pr;playBattleVideo(p,defender,()=>finishMove(mv),ci);});}
+    else{playBattleVideo(p,defender,()=>finishMove(mv),ci);}
   }else{
     __origExecMove(mv);
   }
