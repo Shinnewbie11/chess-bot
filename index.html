@@ -590,7 +590,7 @@ function renderAll(){renderBoard();renderHist();renderCap();updateStatus();}
 
 function canMove(){if(over)return false;if(isDemo)return true;if(myRole==='spectator')return false;return(myRole==='white'&&turn==='white')||(myRole==='black'&&turn==='black');}
 function onSqClick(e){
-  if(_animating)return;
+  if(_animating||_battleActive)return;   // khóa khi đang chiếu clip hoặc đang chạy hiệu ứng
   if(!canMove())return;const tgt=e.currentTarget||e.target?.closest('.sq');if(!tgt)return;
   const r=+tgt.dataset.r,c=+tgt.dataset.c;if(isNaN(r)||isNaN(c))return;
   if(sel){const mv=legal.find(m=>m.to[0]===r&&m.to[1]===c);if(mv){execMove(mv);return;}}
@@ -706,6 +706,31 @@ function showResult(winner,reason,isSpec){
 function resignGame(){if(over||myRole==='spectator')return;if(!confirm('Đầu hàng? Bạn sẽ thua và mất cược!'))return;endGame(opp(myRole),myRole==='white'?'Trắng đầu hàng':'Đen đầu hàng');}
 function requestDraw(){if(!canMove())return;if(matchRef&&!isDemo){matchRef.child('drawOffer').set({from:myRole,ts:Date.now()}).catch(()=>{});}const btn=document.getElementById('btn-draw');btn.textContent='🤝 Đã gửi...';btn.disabled=true;}
 
+// ── Hàng đợi xử lý nước đi nhận từ Firebase (đúng thứ tự, không chồng nhau) ──
+let _moveQueue=[];
+let _processing=false;
+function processQueue(){
+  if(_processing||_moveQueue.length===0)return;
+  // còn đang chiếu clip / chạy hiệu ứng (kể cả nước của chính mình) -> chờ rồi thử lại
+  if(_battleActive||_animating){ setTimeout(processQueue,120); return; }
+  _processing=true;
+  const d=_moveQueue.shift();
+  const mv=d.move;
+  // phát hiện ăn quân ở phía nhận (bàn cờ chưa áp dụng nước này)
+  const p=board[mv.from[0]][mv.from[1]];
+  const target=board[mv.to[0]][mv.to[1]];
+  const isEP=p&&p.toUpperCase()==='P'&&mv.from[1]!==mv.to[1]&&!target;
+  const defender=target||(isEP?board[mv.from[0]][mv.to[1]]:null);
+  const done=()=>{ _processing=false; processQueue(); };   // xong nước này -> xử lý nước kế tiếp
+  const apply=()=>animateMove(mv,()=>{applyMv(mv,d.promotion||null);renderAll();done();});
+  if(defender&&_clips.length>0){
+    const ci=(capW.length+capB.length)%_clips.length;  // cùng công thức -> cùng clip
+    playBattleVideo(p,defender,apply,ci);
+  }else{
+    apply();
+  }
+}
+
 function initFBSync(){
   if(!matchRef||isDemo)return;const mvRef=matchRef.child('moves');
   mvRef.orderByKey().once('value',snap=>{
@@ -714,19 +739,8 @@ function initFBSync(){
     const q=last?mvRef.orderByKey().startAfter(last):mvRef.orderByKey();
     q.on('child_added',snap=>{
       const d=snap.val();if(d.by===myRole)return;
-      const mv=d.move;
-      // phát hiện ăn quân ở phía nhận (bàn cờ chưa áp dụng nước này)
-      const p=board[mv.from[0]][mv.from[1]];
-      const target=board[mv.to[0]][mv.to[1]];
-      const isEP=p&&p.toUpperCase()==='P'&&mv.from[1]!==mv.to[1]&&!target;
-      const defender=target||(isEP?board[mv.from[0]][mv.to[1]]:null);
-      const apply=()=>animateMove(mv,()=>{applyMv(mv,d.promotion||null);renderAll();});
-      if(defender&&_clips.length>0){
-        const ci=(capW.length+capB.length)%_clips.length;  // cùng công thức -> cùng clip
-        playBattleVideo(p,defender,apply,ci);
-      }else{
-        apply();
-      }
+      _moveQueue.push(d);    // xếp hàng, xử lý lần lượt đúng thứ tự
+      processQueue();
     });
   });
   matchRef.child('result').on('value',snap=>{const d=snap.val();if(!d||over)return;over=true;showResult(d.winner||null,d.reason,myRole==='spectator');});
