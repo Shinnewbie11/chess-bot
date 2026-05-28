@@ -4,25 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wizard Chess ⚡</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#0d0c0b;--sur:#161412;--sur2:#1e1b17;--bdr:#2a2520;--bdr2:#3d3528;
-  --gold:#c9a843;--gold2:#8a6e28;--gold3:#1e1608;
-  /* Board — exact HP set colors */
-  --lsq:#e8e8e8;   /* ô trắng: trắng sáng */
-  --dsq:#0a0a0a;   /* ô đen: đen tuyền */
-  --rim:#0a0908;
-  --text:#e0d4b8;--text2:#8a7c60;--text3:#5a5040;
-  --green:#3a9e5f;--red:#b43030;--sq:62px;
+  --bg:#05070f;--sur:#0c1322;--sur2:#11192c;--bdr:#1c2b45;--bdr2:#2b4467;
+  --gold:#22e6ff;--gold2:#0a7f9c;--gold3:#06222e;
+  --neon1:#22e6ff;--neon2:#ff2d55;--neon3:#ffd54a;
+  --lsq:#dfe9ff;
+  --dsq:#0a1226;
+  --rim:#05070f;
+  --text:#e6f1ff;--text2:#7d93b8;--text3:#4d6188;
+  --green:#2bff88;--red:#ff2d55;--sq:62px;
 }
 html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:'DM Mono',monospace}
-body{background:var(--bg);background-image:radial-gradient(ellipse 100% 50% at 50% -5%, rgba(201,168,67,0.05) 0%, transparent 60%);display:grid;grid-template-rows:auto auto 1fr}
+body{background:var(--bg);background-image:radial-gradient(ellipse 70% 50% at 18% -5%, rgba(34,230,255,0.10) 0%, transparent 55%),radial-gradient(ellipse 70% 50% at 85% 105%, rgba(255,45,85,0.10) 0%, transparent 55%);display:grid;grid-template-rows:auto auto 1fr}
 header{display:flex;align-items:center;justify-content:space-between;padding:13px 28px;background:var(--sur);border-bottom:1px solid var(--bdr)}
-.logo{font-family:'Cinzel',serif;font-size:19px;font-weight:700;color:var(--gold);letter-spacing:3px;text-shadow:0 0 30px rgba(201,168,67,0.35);display:flex;align-items:center;gap:10px}
+.logo{font-family:'Orbitron',sans-serif;font-size:19px;font-weight:700;color:var(--gold);letter-spacing:3px;text-shadow:0 0 30px rgba(201,168,67,0.35);display:flex;align-items:center;gap:10px}
 .logo-sub{font-size:11px;color:var(--text2);letter-spacing:4px;font-weight:400;font-family:'DM Mono',monospace}
 .header-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .pill{padding:4px 12px;border-radius:20px;font-size:11px;letter-spacing:.5px;border:1px solid var(--bdr2);color:var(--text2);font-family:'DM Mono',monospace}
@@ -32,7 +32,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:13p
 @keyframes livePulse{50%{opacity:.2}}
 .status-bar{padding:9px 28px;background:var(--sur);border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;gap:14px}
 .status-msg{font-size:13px;color:var(--text);letter-spacing:.3px;text-align:center}
-.status-msg.check{color:#e05050}.status-msg.over{color:var(--gold);font-family:'Cinzel',serif}
+.status-msg.check{color:#e05050}.status-msg.over{color:var(--gold);font-family:'Orbitron',sans-serif}
 main{display:flex;align-items:flex-start;justify-content:center;gap:20px;padding:24px 16px;flex-wrap:wrap}
 .pcol{display:flex;flex-direction:column;gap:12px;width:196px}
 .pcard{background:var(--sur);border:1px solid var(--bdr);border-radius:10px;padding:14px 16px;transition:border-color .25s,box-shadow .25s}
@@ -40,15 +40,15 @@ main{display:flex;align-items:flex-start;justify-content:center;gap:20px;padding
 .pcard.winner{border-color:var(--green);box-shadow:0 0 24px rgba(58,158,95,.25);animation:winGlow 2s ease infinite}
 @keyframes winGlow{50%{box-shadow:0 0 40px rgba(58,158,95,.4)}}
 .pc-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.pc-av{width:40px;height:40px;border-radius:50%;background:var(--sur2);border:1px solid var(--bdr2);display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0;color:var(--gold);font-family:'Cinzel',serif}
-.pc-name{font-family:'Cinzel',serif;font-size:14px;font-weight:600;color:var(--text);word-break:break-all;line-height:1.2}
+.pc-av{width:40px;height:40px;border-radius:50%;background:var(--sur2);border:1px solid var(--bdr2);display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0;color:var(--gold);font-family:'Orbitron',sans-serif}
+.pc-name{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:600;color:var(--text);word-break:break-all;line-height:1.2}
 .pc-side{font-size:9px;color:var(--text3);margin-top:3px;letter-spacing:1.5px;text-transform:uppercase}
 .pc-turn{font-size:11px;padding:4px 8px;border-radius:4px;border:1px solid var(--bdr2);color:var(--text3);margin-bottom:8px;text-align:center;letter-spacing:.5px}
 .pc-turn.go{border-color:var(--green);color:var(--green);background:rgba(58,158,95,.08)}
 .cap-lbl{font-size:9px;color:var(--text3);margin-bottom:4px;letter-spacing:2px;text-transform:uppercase}
 .cap{font-size:14px;min-height:22px;line-height:1.4;word-break:break-all}
 .panel{background:var(--sur);border:1px solid var(--bdr);border-radius:10px;padding:14px 16px}
-.panel-lbl{font-size:9px;letter-spacing:2.5px;color:var(--text3);text-transform:uppercase;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bdr);font-family:'Cinzel',serif}
+.panel-lbl{font-size:9px;letter-spacing:2.5px;color:var(--text3);text-transform:uppercase;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bdr);font-family:'Orbitron',sans-serif}
 .move-list{max-height:160px;overflow-y:auto;font-size:11.5px;color:var(--text2);display:flex;flex-direction:column;gap:2px}
 .move-list::-webkit-scrollbar{width:3px}.move-list::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px}
 .mv-row{display:flex;gap:6px}.mv-n{color:var(--text3);width:22px;flex-shrink:0}.mv-w,.mv-b{flex:1;color:var(--text)}
@@ -58,86 +58,292 @@ main{display:flex;align-items:flex-start;justify-content:center;gap:20px;padding
 .btn-red{border-color:rgba(180,48,48,.35);color:#b87070}.btn-red:hover{background:rgba(180,48,48,.1);border-color:var(--red);color:#e07070}
 .board-wrap{display:flex;flex-direction:column;align-items:center}
 .coord-row{display:flex}.coord-col{display:flex;flex-direction:column}
-.coord{display:flex;align-items:center;justify-content:center;font-size:9.5px;color:var(--text3);font-family:'Cinzel',serif;letter-spacing:.5px}
+.coord{display:flex;align-items:center;justify-content:center;font-size:9.5px;color:var(--text3);font-family:'Orbitron',sans-serif;letter-spacing:.5px}
 .coord.file{width:var(--sq);height:18px}.coord.rank{width:18px;height:var(--sq)}
-
-/* ── BOARD FRAME — HP leather-bound with gold trim ── */
 #board-frame{
-  background:#080706;padding:16px;border-radius:3px;
+  background:linear-gradient(135deg,#0a1424,#070b16);padding:16px;border-radius:6px;
   box-shadow:
-    inset 0 0 0 1px #4a3a1a,
-    0 0 0 1px #2a2010,
-    0 0 0 4px #0d0b08,
-    0 20px 80px rgba(0,0,0,.98),
-    0 0 60px rgba(0,0,0,.8);
+    inset 0 0 0 1px rgba(34,230,255,.55),
+    inset 0 0 18px rgba(34,230,255,.18),
+    0 0 0 1px rgba(255,45,85,.35),
+    0 0 22px rgba(34,230,255,.35),
+    0 0 60px rgba(255,45,85,.18),
+    0 20px 80px rgba(0,0,0,.9);
   position:relative;
+  animation:framePulse 3.2s ease-in-out infinite;
 }
-/* Gold corner stars */
-#board-frame::before{content:'✦';position:absolute;top:-8px;left:-8px;color:var(--gold);font-size:14px;text-shadow:0 0 8px rgba(201,168,67,0.6)}
-#board-frame::after{content:'✦';position:absolute;bottom:-8px;right:-8px;color:var(--gold);font-size:14px;text-shadow:0 0 8px rgba(201,168,67,0.6)}
-
+@keyframes framePulse{50%{box-shadow:inset 0 0 0 1px rgba(34,230,255,.75),inset 0 0 26px rgba(34,230,255,.28),0 0 0 1px rgba(255,45,85,.5),0 0 34px rgba(34,230,255,.55),0 0 80px rgba(255,45,85,.3),0 20px 80px rgba(0,0,0,.9)}}
+#board-frame::before{content:'⚡';position:absolute;top:-10px;left:-10px;color:var(--neon1);font-size:16px;text-shadow:0 0 10px var(--neon1),0 0 20px var(--neon1)}
+#board-frame::after{content:'⚡';position:absolute;bottom:-10px;right:-10px;color:var(--neon2);font-size:16px;text-shadow:0 0 10px var(--neon2),0 0 20px var(--neon2)}
 #board{
   display:grid;grid-template-columns:repeat(8,var(--sq));grid-template-rows:repeat(8,var(--sq));
-  border:3px solid #1a1408;border-radius:1px;overflow:hidden;
+  border:2px solid rgba(34,230,255,.4);border-radius:2px;overflow:hidden;
 }
-
-/* ── SQUARES — HP Wizard Chess exact look ── */
 .sq{width:var(--sq);height:var(--sq);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;user-select:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
-
-/* Ô TRẮNG — trắng sáng với vân nứt đá xanh tím mờ (giống ảnh HP) */
 .sq.light{
-  background-color:#e2e4e8;
+  background-color:#cdddf5;
   background-image:
-    /* vân nứt chéo — crack pattern */
-    linear-gradient(127deg, transparent 40%, rgba(80,90,120,0.07) 40%, rgba(80,90,120,0.07) 41%, transparent 41%),
-    linear-gradient(53deg,  transparent 55%, rgba(60,70,100,0.06) 55%, rgba(60,70,100,0.06) 56%, transparent 56%),
-    linear-gradient(170deg, transparent 30%, rgba(70,80,110,0.05) 30%, rgba(70,80,110,0.05) 31%, transparent 31%),
-    /* ánh sáng bề mặt */
-    radial-gradient(ellipse at 35% 25%, rgba(255,255,255,0.5) 0%, transparent 60%);
+    linear-gradient(135deg, rgba(34,230,255,.10), transparent 55%),
+    radial-gradient(ellipse at 30% 22%, rgba(255,255,255,0.7) 0%, transparent 60%);
 }
-/* Ô ĐEN — đen tuyền với ánh xanh lam rất nhẹ */
 .sq.dark{
-  background-color:#0c0c10;
-  background-image:radial-gradient(ellipse at 30% 25%, rgba(40,45,70,0.4) 0%, transparent 65%);
+  background-color:#0b1730;
+  background-image:
+    linear-gradient(135deg, rgba(34,230,255,.06), transparent 50%),
+    radial-gradient(ellipse at 30% 25%, rgba(40,90,160,0.35) 0%, transparent 65%);
 }
-
-/* last move */
-.sq.lm.light{background:#c8c850;background-image:none}
-.sq.lm.dark{background:#3a3a00;background-image:none}
-/* selected */
-.sq.sel.light{background:#50b050;background-image:none}
-.sq.sel.dark{background:#1a5a1a;background-image:none}
-/* check */
-.sq.incheck{background:#8a1818!important;background-image:none!important}
-
-/* move dot */
-.sq.can-mv::after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;z-index:2;pointer-events:none}
-.sq.light.can-mv::after{background:rgba(0,0,0,0.20)}
-.sq.dark.can-mv::after{background:rgba(255,255,255,0.15)}
-.sq.can-cap::before{content:'';position:absolute;inset:4px;border-radius:50%;border:5px solid rgba(160,30,30,.55);z-index:2;pointer-events:none}
-
-.pc-wrap{width:var(--sq);height:var(--sq);display:flex;align-items:center;justify-content:center;pointer-events:none;padding:2px;position:relative;z-index:3}
-
-/* overlays */
+.sq.lm.light{background:#7df0ff;background-image:none;box-shadow:inset 0 0 14px rgba(34,230,255,.7)}
+.sq.lm.dark{background:#0e4a60;background-image:none;box-shadow:inset 0 0 14px rgba(34,230,255,.55)}
+.sq.sel.light{background:#5effc0;background-image:none;box-shadow:inset 0 0 16px rgba(43,255,136,.8)}
+.sq.sel.dark{background:#0c5a3a;background-image:none;box-shadow:inset 0 0 16px rgba(43,255,136,.7)}
+.sq.incheck{background:#7a0a26!important;background-image:none!important;box-shadow:inset 0 0 18px rgba(255,45,85,.9)!important;animation:checkPulse .8s ease-in-out infinite}
+@keyframes checkPulse{50%{box-shadow:inset 0 0 26px rgba(255,45,85,1)!important}}
+.sq.can-mv::after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;z-index:2;pointer-events:none;background:rgba(34,230,255,.6);box-shadow:0 0 10px rgba(34,230,255,.8)}
+.sq.light.can-mv::after{background:rgba(20,120,180,.55);box-shadow:0 0 8px rgba(34,230,255,.6)}
+.sq.dark.can-mv::after{background:rgba(34,230,255,.65);box-shadow:0 0 10px rgba(34,230,255,.85)}
+.sq.can-cap::before{content:'';position:absolute;inset:4px;border-radius:50%;border:4px solid rgba(255,45,85,.8);box-shadow:0 0 12px rgba(255,45,85,.7),inset 0 0 10px rgba(255,45,85,.5);z-index:2;pointer-events:none}
+.pc-wrap{width:var(--sq);height:var(--sq);display:flex;align-items:center;justify-content:center;pointer-events:none;padding:2px;position:relative;z-index:3;filter:drop-shadow(0 0 3px rgba(34,230,255,.3))}
 #result-ov{display:none;position:fixed;inset:0;background:rgba(5,4,3,.9);z-index:9000;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
 #result-ov.show{display:flex}
-.res-box{background:linear-gradient(160deg,#1c1810,#141008);border:1px solid var(--bdr2);border-radius:18px;padding:40px 48px;text-align:center;width:90%;max-width:380px;box-shadow:0 0 0 1px var(--gold2),0 30px 80px rgba(0,0,0,.9);animation:popIn .4s cubic-bezier(.34,1.56,.64,1)}
+.res-box{background:linear-gradient(160deg,#0e1a30,#070d1a);border:1px solid var(--bdr2);border-radius:18px;padding:40px 48px;text-align:center;width:90%;max-width:380px;box-shadow:0 0 0 1px var(--gold2),0 0 40px rgba(34,230,255,.25),0 30px 80px rgba(0,0,0,.9);animation:popIn .4s cubic-bezier(.34,1.56,.64,1)}
 @keyframes popIn{from{opacity:0;transform:scale(.75) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
-.res-icon{font-size:54px;margin-bottom:12px}.res-title{font-family:'Cinzel',serif;font-size:26px;font-weight:700;color:var(--gold);margin-bottom:6px;text-shadow:0 0 30px rgba(201,168,67,.4)}
+.res-icon{font-size:54px;margin-bottom:12px}.res-title{font-family:'Orbitron',sans-serif;font-size:26px;font-weight:700;color:var(--gold);margin-bottom:6px;text-shadow:0 0 30px rgba(201,168,67,.4)}
 .res-sub{font-size:12px;color:var(--text2);margin-bottom:20px;line-height:1.6}
 .res-prize{background:var(--gold3);border:1px solid var(--gold2);border-radius:8px;padding:14px;margin-bottom:20px}
 .res-amt{font-size:21px;color:var(--gold);font-weight:500}.res-lbl{font-size:10px;color:var(--text3);margin-top:4px;letter-spacing:1px}
-.btn-close{padding:10px 28px;background:var(--gold3);border:1px solid var(--gold2);border-radius:8px;color:var(--gold);font-family:'Cinzel',serif;font-size:13px;cursor:pointer;letter-spacing:2px;transition:all .15s}
+.btn-close{padding:10px 28px;background:var(--gold3);border:1px solid var(--gold2);border-radius:8px;color:var(--gold);font-family:'Orbitron',sans-serif;font-size:13px;cursor:pointer;letter-spacing:2px;transition:all .15s}
 .btn-close:hover{background:rgba(201,168,67,.15)}
 #promo-ov{display:none;position:fixed;inset:0;background:rgba(5,4,3,.85);z-index:8000;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
 #promo-ov.show{display:flex}
 .promo-box{background:var(--sur);border:1px solid var(--bdr2);border-radius:12px;padding:28px 32px;text-align:center}
-.promo-title{font-family:'Cinzel',serif;color:var(--gold);font-size:17px;margin-bottom:16px;letter-spacing:2px}
+.promo-title{font-family:'Orbitron',sans-serif;color:var(--gold);font-size:17px;margin-bottom:16px;letter-spacing:2px}
 .promo-grid{display:flex;gap:12px;justify-content:center}
 .promo-btn{width:62px;height:62px;background:var(--sur2);border:1px solid var(--bdr2);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s}
 .promo-btn:hover{border-color:var(--gold);background:var(--gold3);transform:scale(1.08)}
 
-@media(max-width:720px){:root{--sq:44px}.pcol{width:100%;flex-direction:row;flex-wrap:wrap}.pcard,.panel{flex:1 1 150px;min-width:0}#board-frame{padding:8px}header{padding:10px 16px}.logo{font-size:16px}.logo-sub{display:none}}
+/* ═══════════════════════════════════════════════════
+   BATTLE VIDEO OVERLAY  (phần CSS này trước đây bị THIẾU
+   -> đó là lý do clip không hiện đúng trên PC & điện thoại)
+   ═══════════════════════════════════════════════════ */
+#battle-video-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:10000;
+  background:#000;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+#battle-video-overlay.active{ display:flex; }
+
+/* Video phủ kín màn hình nhưng KHÔNG bị cắt -> xem được trọn trên cả PC lẫn điện thoại */
+#battle-video{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:contain;       /* giữ trọn khung hình, không méo, không cắt */
+  background:#000;
+}
+
+/* Chữ VS ở giữa */
+#battle-vs{
+  position:absolute;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  font-family:'Orbitron',sans-serif;
+  font-weight:700;
+  font-size:clamp(50px,8vw,110px);
+  color:var(--gold);
+  text-shadow:0 0 30px rgba(201,168,67,.85),0 4px 14px #000;
+  z-index:3;
+  pointer-events:none;
+  animation:battlePop 1.9s ease forwards;
+}
+
+/* Quân tấn công (trái) & phòng thủ (phải) */
+#battle-attacker,#battle-defender{
+  position:absolute;
+  top:50%;
+  transform:translate(-50%,-50%);
+  font-size:clamp(55px,9vw,120px);
+  z-index:3;
+  pointer-events:none;
+  text-shadow:0 0 30px rgba(255,255,255,.45),0 4px 14px #000;
+}
+#battle-attacker{ left:25%; animation:battleSlideL 1.9s ease forwards; }
+#battle-defender{ left:75%; animation:battleSlideR 1.9s ease forwards; }
+
+/* Tên quân nằm dưới biểu tượng */
+.fighter-label{
+  position:absolute;
+  top:calc(50% + clamp(50px,8vw,90px));
+  transform:translateX(-50%);
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(11px,1.6vw,16px);
+  letter-spacing:2px;
+  color:var(--text);
+  z-index:3;
+  pointer-events:none;
+  white-space:nowrap;
+  text-shadow:0 2px 8px #000;
+  animation:battlePop 1.9s ease forwards;
+}
+#label-attacker{ left:25%; }
+#label-defender{ left:75%; }
+
+/* Thanh tiến trình chạy theo thời lượng clip */
+#battle-progress{
+  position:absolute;
+  left:0; right:0; bottom:0;
+  height:5px;
+  background:rgba(255,255,255,.12);
+  z-index:4;
+}
+#battle-progress-bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--gold2),var(--gold));
+  box-shadow:0 0 10px var(--gold);
+}
+
+/* Nút bỏ qua */
+#battle-skip{
+  position:absolute;
+  bottom:16px; right:16px;
+  z-index:5;
+  padding:6px 14px;
+  background:rgba(0,0,0,.55);
+  border:1px solid var(--bdr2);
+  border-radius:6px;
+  color:var(--text2);
+  font-family:'DM Mono',monospace;
+  font-size:11px;
+  letter-spacing:1px;
+  cursor:pointer;
+  transition:all .15s;
+}
+#battle-skip:hover{ border-color:var(--gold); color:var(--gold); background:rgba(0,0,0,.8); }
+
+@keyframes battlePop{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(0)}
+  35%{opacity:1;transform:translate(-50%,-50%) scale(1.18)}
+  55%{transform:translate(-50%,-50%) scale(1)}
+  82%{opacity:1}
+  100%{opacity:0}
+}
+@keyframes battleSlideL{
+  0%{opacity:0;transform:translate(calc(-50% - 80px),-50%)}
+  35%{opacity:1;transform:translate(-50%,-50%)}
+  82%{opacity:1}
+  100%{opacity:0}
+}
+@keyframes battleSlideR{
+  0%{opacity:0;transform:translate(calc(-50% + 80px),-50%)}
+  35%{opacity:1;transform:translate(-50%,-50%)}
+  82%{opacity:1}
+  100%{opacity:0}
+}
+/* fighter-label dùng battlePop nhưng chỉ dịch ngang */
+.fighter-label{ transform:translateX(-50%); }
+@keyframes labelPop{
+  0%{opacity:0}35%{opacity:1}82%{opacity:1}100%{opacity:0}
+}
+.fighter-label{ animation:labelPop 1.9s ease forwards; }
+
+/* ── Hiệu ứng di chuyển kiểu anime: chớp sáng khi đáp + rung bàn cờ ── */
+@keyframes impactRing{
+  0%{width:8px;height:8px;opacity:1}
+  100%{width:120px;height:120px;opacity:0}
+}
+@keyframes impactFlash{
+  0%{transform:translate(-50%,-50%) scale(.3);opacity:1}
+  100%{transform:translate(-50%,-50%) scale(1.6);opacity:0}
+}
+@keyframes boardShake{
+  0%,100%{transform:translate(0,0)}
+  15%{transform:translate(-3px,2px)}
+  30%{transform:translate(3px,-2px)}
+  45%{transform:translate(-2px,-2px)}
+  60%{transform:translate(2px,2px)}
+  75%{transform:translate(-1px,1px)}
+}
+#board-frame.shake{animation:boardShake .3s ease}
+
+/* ── Desktop: giữ nguyên như file gốc ── */
+@media(max-width:720px){
+  :root{--sq:44px}
+  .pcol{width:100%;flex-direction:row;flex-wrap:wrap}
+  .pcard,.panel{flex:1 1 150px;min-width:0}
+  #board-frame{padding:8px}
+  header{padding:10px 16px}
+  .logo{font-size:16px}
+  .logo-sub{display:none}
+}
+
+/* ── Mobile: layout dọc bàn cờ trên thông tin dưới ── */
+@media(max-width:480px){
+  :root{ --sq: calc((100vw - 52px) / 8); }
+
+  header{ padding:7px 12px; }
+  .logo{ font-size:14px; letter-spacing:2px; }
+  .logo-sub{ display:none; }
+  .header-right{ gap:5px; }
+  .pill{ padding:2px 7px; font-size:9px; }
+  .live{ display:none; }
+
+  .status-bar{ padding:5px 10px; }
+  .status-msg{ font-size:11px; }
+
+  /* Layout dọc */
+  main{
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 8px 16px;
+  }
+
+  /* Bàn cờ lên trên cùng */
+  #board-wrap{ order:1; width:100%; display:flex; justify-content:center; }
+  #board-frame{ padding:5px; }
+
+  /* 2 player card ngang nhau */
+  .pcol:first-child{ order:2; width:100%; flex-direction:row; gap:6px; }
+  .pcol:last-child{  order:3; width:100%; flex-direction:row; gap:6px; }
+
+  .pcard{ flex:1; min-width:0; padding:7px 8px; }
+  .panel{ flex:1; min-width:0; padding:8px 10px; }
+  .pc-av{ width:28px; height:28px; font-size:15px; }
+  .pc-name{ font-size:11px; }
+  .pc-side{ display:none; }
+  .pc-turn{ font-size:9px; padding:2px 5px; margin-bottom:3px; }
+  .cap-lbl{ font-size:7px; }
+  .cap{ font-size:11px; min-height:14px; }
+  .panel-lbl{ font-size:7px; margin-bottom:5px; padding-bottom:5px; }
+  .move-list{ max-height:60px; font-size:9.5px; }
+  .btn{ padding:5px 7px; font-size:9px; }
+  .ctrl-btns{ gap:5px; }
+
+  .coord{ font-size:7px; }
+  .coord.rank{ width:12px; }
+  .coord.file{ height:12px; }
+  #board-frame::before,
+  #board-frame::after{ font-size:9px; }
+
+  /* Result box */
+  .res-box{ padding:20px 14px; border-radius:10px; width:92%; }
+  .res-title{ font-size:18px; }
+  .res-icon{ font-size:36px; margin-bottom:8px; }
+
+  /* Battle video mobile */
+  #battle-vs{ font-size:clamp(38px,12vw,68px); }
+  #battle-attacker,
+  #battle-defender{ font-size:clamp(40px,12vw,68px); }
+  .fighter-label{ font-size:8px; top:calc(50% + clamp(30px,9vw,50px)); }
+  #battle-skip{ bottom:10px; right:10px; font-size:9px; padding:3px 7px; }
+  #battle-progress{ height:3px; }
+}
 </style>
 </head>
 <body>
@@ -191,154 +397,94 @@ const FB_CFG={apiKey:"YOUR_API_KEY",authDomain:"YOUR_PROJECT.firebaseapp.com",da
 let matchRef=null;
 if(!isDemo){firebase.initializeApp(FB_CFG);matchRef=firebase.database().ref('chess/'+matchId);}
 
-// ════════════════════════════════════════════════════════
-//  HARRY POTTER WIZARD CHESS PIECES — SVG
-//  Trắng: kim loại bạc sáng, sculpted stone/silver
-//  Đen:   kim loại đen bóng obsidian, đường nét sắc
-// ════════════════════════════════════════════════════════
 function makePieceSVG(piece){
   const W=piece===piece.toUpperCase();
-
-  // WHITE: bạc sáng — fill trắng xám, highlight bạc, bóng xanh lạnh
-  // BLACK: đen bóng obsidian — fill đen, điểm sáng xanh lam lạnh
-  const f   = W?'#d8dade':'#18181c';   // fill
-  const fhi = W?'#f0f2f5':'#2c2c38';   // highlight (face catch light)
-  const fsh = W?'#a8aab8':'#080810';   // shadow
-  const st  = W?'#606878':'#5060a0';   // stroke — xanh lam lạnh cả hai
-  const sw  = W?1.6:1.4;
-  const det = W?'#9098a8':'#3848a0';   // detail lines
-  const eye = W?'#404858':'#6080e0';   // accent/eye
-
-  const A =`fill="${f}" stroke="${st}" stroke-width="${sw}" stroke-linejoin="round" stroke-linecap="round"`;
-  const AH=`fill="${fhi}" stroke="${st}" stroke-width="1" stroke-linejoin="round"`;
-  const AS=`fill="${fsh}" stroke="${st}" stroke-width="1" stroke-linejoin="round"`;
-  const D =`fill="${det}" stroke="none"`;
-  const E =`fill="${eye}" stroke="none"`;
-
-  // vein / surface texture
-  const tex= W
-    ? `<path d="M14,7 Q19,13 17,22" stroke="rgba(150,160,180,0.25)" stroke-width="0.7" fill="none"/>
-       <path d="M27,10 Q24,17 29,23" stroke="rgba(150,160,180,0.18)" stroke-width="0.5" fill="none"/>`
-    : `<path d="M16,8 Q21,15 19,24" stroke="rgba(40,60,140,0.2)" stroke-width="0.5" fill="none"/>`;
-
+  // ── Bảng màu anime cel-shading ──
+  const out  = W?'#15263f':'#04060c';     // viền đậm
+  const body = W?'#eaf2ff':'#1c2944';     // tông chính
+  const shade= W?'#b3cdf0':'#0d1828';     // tông tối (cel shadow)
+  const gloss= W?'#ffffff':'#46608c';     // điểm cao sáng
+  const gem  = W?'#26e0ff':'#ff3b66';     // ngọc phát sáng theo phe
+  const glow = W?'rgba(38,224,255,.9)':'rgba(255,59,102,.9)';
+  const sw=2;
+  const B=`fill="${body}" stroke="${out}" stroke-width="${sw}" stroke-linejoin="round" stroke-linecap="round"`;
+  const S=`fill="${shade}" stroke="none"`;
+  const G=`fill="${gloss}" stroke="none" opacity="0.85"`;
+  const M=`fill="${gem}" stroke="${out}" stroke-width="1"`;
+  const EYE=`fill="${gem}" stroke="none"`;
+  // bệ chung cho mọi quân
+  const base=`<path d="M10,39 Q22.5,36 35,39 L35,42 Q22.5,44.6 10,42 Z" ${B}/><path d="M22.5,37 Q35,37.6 35,39 L35,42 Q22.5,44.6 22.5,42.5 Z" ${S}/>`;
   const t=piece.toUpperCase();
   let inner='';
 
-  // ── TỐT (Pawn) ─────────────────────────────
-  if(t==='P'){inner=`
-    ${tex}
-    <circle cx="22.5" cy="10" r="6.5" ${A}/>
-    <path d="M20,6 Q22.5,4 25,6" ${AH}/>
-    <path d="M17,18 C19,16.5 26,16.5 28,18 L30,27 C26,25.5 19,25.5 15,27 Z" ${A}/>
-    <path d="M17,18 L18.5,17 Q22.5,16 26.5,17 L28,18" ${AH}/>
-    <path d="M12,27 Q22.5,25 33,27 L34,34 Q22.5,32 11,34 Z" ${A}/>
-    <path d="M12,27 Q22.5,25.5 33,27" ${AH}/>
-    <rect x="8" y="34" width="29" height="5.5" rx="2" ${A}/>
-    <rect x="8" y="34" width="29" height="2" rx="2" ${AH}/>
-    <line x1="12" y1="30.5" x2="33" y2="30.5" stroke="${det}" stroke-width="0.8"/>
-    <circle cx="22.5" cy="10" r="2.5" ${D}/>
-  `;}
+  // ── TỐT ──
+  if(t==='P'){inner=`${base}
+    <path d="M16,40 Q15,29 22.5,25 Q30,29 29,40 Z" ${B}/>
+    <path d="M22.5,25 Q30,29 29,40 L25,40 Q26.5,29 22.5,25 Z" ${S}/>
+    <circle cx="22.5" cy="17" r="7.2" ${B}/>
+    <path d="M22.5,9.8 A7.2,7.2 0 0,1 29,20 Q26,15 22.5,9.8 Z" ${S}/>
+    <circle cx="19.8" cy="14.6" r="2.4" ${G}/>
+    <circle cx="22.5" cy="17" r="2" ${M}/>`;}
 
-  // ── XE (Rook) ──────────────────────────────
-  else if(t==='R'){inner=`
-    ${tex}
-    <rect x="7" y="5" width="9" height="12" rx="1" ${A}/>
-    <rect x="18" y="5" width="9" height="12" rx="1" ${A}/>
-    <rect x="29" y="5" width="9" height="12" rx="1" ${A}/>
-    <rect x="7" y="5" width="9" height="3" rx="1" ${AH}/>
-    <rect x="18" y="5" width="9" height="3" rx="1" ${AH}/>
-    <rect x="29" y="5" width="9" height="3" rx="1" ${AH}/>
-    <rect x="9" y="17" width="27" height="14" ${A}/>
-    <rect x="9" y="17" width="27" height="3" ${AH}/>
-    <rect x="21" y="19" width="3.5" height="8" rx="1" ${D}/>
-    <line x1="9" y1="24" x2="36" y2="24" stroke="${det}" stroke-width="0.8"/>
-    <rect x="13" y="31" width="19" height="5" rx="1" ${A}/>
-    <rect x="5" y="36" width="35" height="5" rx="2" ${A}/>
-    <rect x="5" y="36" width="35" height="2" rx="2" ${AH}/>
-  `;}
+  // ── XE ──
+  else if(t==='R'){inner=`${base}
+    <path d="M15,40 L16,23 L29,23 L30,40 Z" ${B}/>
+    <path d="M22.5,23 L29,23 L30,40 L24,40 Z" ${S}/>
+    <path d="M13,23 L13,15 L17,15 L17,18 L20.5,18 L20.5,15 L24.5,15 L24.5,18 L28,18 L28,15 L32,15 L32,23 Z" ${B}/>
+    <path d="M22.5,15 L24.5,15 L24.5,18 L28,18 L28,15 L32,15 L32,23 L22.5,23 Z" ${S}/>
+    <rect x="17" y="26" width="2.6" height="11" rx="1.2" ${G}/>
+    <circle cx="22.5" cy="31" r="2.4" ${M}/>`;}
 
-  // ── MÃ (Knight) ────────────────────────────
-  else if(t==='N'){inner=`
-    ${tex}
-    <path d="M15,10 L11,3 L18,8 C20,7 25,7 27,8 L34,3 L30,10
-      Q35,13 35,20 Q35,27 29,30 Q26,32 22.5,32 Q19,32 16,30 Q10,27 10,20 Q10,13 15,10 Z" ${A}/>
-    <path d="M11,3 L15,10 Q12,13 10,20" stroke="${det}" stroke-width="0.7" fill="none"/>
-    <path d="M34,3 L30,10 Q35,13 35,20" stroke="${det}" stroke-width="0.7" fill="none"/>
-    <path d="M18,8 Q22.5,6 27,8" ${AH}/>
-    <rect x="16" y="16.5" width="13" height="9.5" rx="4.5" fill="${fhi}" stroke="${st}" stroke-width="1"/>
-    <rect x="17" y="18.5" width="4.5" height="2.5" rx="1.2" ${E}/>
-    <rect x="23" y="18.5" width="4.5" height="2.5" rx="1.2" ${E}/>
-    <path d="M17,25.5 Q22.5,27.5 28,25.5 L28.5,29.5 Q22.5,32 16.5,29.5 Z" ${A}/>
-    <path d="M10,32 Q8,36 10.5,39 L34.5,39 Q37,36 35,32 Z" ${A}/>
-    <path d="M10,32 Q8,36 10.5,39" stroke="${det}" stroke-width="0.7" fill="none"/>
-    <line x1="12" y1="34.5" x2="33" y2="34.5" stroke="${det}" stroke-width="0.8"/>
-    <line x1="11" y1="37" x2="34" y2="37" stroke="${det}" stroke-width="0.6"/>
-    <rect x="6" y="39" width="33" height="5" rx="2" ${A}/>
-    <rect x="6" y="39" width="33" height="2" rx="2" ${AH}/>
-  `;}
+  // ── MÃ (có mắt to kiểu anime) ──
+  else if(t==='N'){inner=`${base}
+    <path d="M16,40 Q13,30 15,21 Q16,13 22,10 L19.5,5 L25,8.5 Q31,11 31,20 Q31,30 28,40 Z" ${B}/>
+    <path d="M22,10 Q31,12.5 31,20 Q31,30 28,40 L23.5,40 Q27,28 26,18 Q25,13 22,10 Z" ${S}/>
+    <path d="M19.5,5 L18,0.5 L22,4 Z" ${B}/>
+    <ellipse cx="20.6" cy="19" rx="2.5" ry="3.1" ${EYE}/>
+    <circle cx="19.9" cy="18.1" r="0.9" fill="#ffffff"/>
+    <path d="M17,25 Q16,31 17.5,38" stroke="${gloss}" stroke-width="1.6" fill="none" stroke-linecap="round" opacity="0.7"/>`;}
 
-  // ── TƯỢNG (Bishop) ─────────────────────────
-  else if(t==='B'){inner=`
-    ${tex}
-    <rect x="20" y="2" width="5" height="14" rx="2.5" ${A}/>
-    <rect x="15.5" y="5" width="14" height="5.5" rx="2" ${A}/>
-    <rect x="15.5" y="5" width="14" height="2" rx="2" ${AH}/>
-    <circle cx="22.5" cy="18" r="5.5" ${A}/>
-    <path d="M20,15 Q22.5,13 25,15" ${AH}/>
-    <path d="M22.5,23.5 L13.5,33 L31.5,33 Z" ${A}/>
-    <path d="M22.5,23.5 L13.5,33" stroke="${det}" stroke-width="0.7" fill="none"/>
-    <rect x="13" y="33" width="19" height="4.5" rx="2" ${A}/>
-    <path d="M9,37.5 Q22.5,35.5 36,37.5 L35,43 Q22.5,45 10,43 Z" ${A}/>
-    <path d="M9,37.5 Q22.5,36 36,37.5" ${AH}/>
-    <circle cx="22.5" cy="18" r="2.8" ${D}/>
-    <circle cx="22.5" cy="18" r="1.2" ${E}/>
-    <rect x="20" y="2" width="5" height="3" rx="2" ${AH}/>
-  `;}
+  // ── TƯỢNG ──
+  else if(t==='B'){inner=`${base}
+    <path d="M17,40 Q16,30 22.5,26 Q29,30 28,40 Z" ${B}/>
+    <path d="M22.5,26 Q29,30 28,40 L24.5,40 Q26,30 22.5,26 Z" ${S}/>
+    <path d="M22.5,7 Q29.5,16 22.5,26 Q15.5,16 22.5,7 Z" ${B}/>
+    <path d="M22.5,7 Q29.5,16 22.5,26 Q24.5,16 22.5,7 Z" ${S}/>
+    <circle cx="22.5" cy="5.5" r="2.1" ${B}/>
+    <path d="M22.5,12 L25,17.5" stroke="${out}" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <circle cx="22.5" cy="19.5" r="1.9" ${M}/>
+    <path d="M19.8,13 Q18,18 19.5,23" stroke="${gloss}" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.7"/>`;}
 
-  // ── HẬU (Queen) ────────────────────────────
-  else if(t==='Q'){inner=`
-    ${tex}
-    <circle cx="22.5" cy="6" r="4" ${A}/><circle cx="22.5" cy="4" r="1.5" ${AH}/>
-    <circle cx="12" cy="10" r="4" ${A}/><circle cx="12" cy="8" r="1.5" ${AH}/>
-    <circle cx="17" cy="7.5" r="4" ${A}/><circle cx="17" cy="5.5" r="1.5" ${AH}/>
-    <circle cx="28" cy="7.5" r="4" ${A}/><circle cx="28" cy="5.5" r="1.5" ${AH}/>
-    <circle cx="33" cy="10" r="4" ${A}/><circle cx="33" cy="8" r="1.5" ${AH}/>
-    <path d="M8,13 Q22.5,11 37,13 L37,19 Q22.5,17 8,19 Z" ${A}/>
-    <path d="M8,13 Q22.5,11.5 37,13" ${AH}/>
-    <path d="M8,19 C10,18 35,18 37,19 L35,33 Q22.5,31 10,33 Z" ${A}/>
-    <circle cx="22.5" cy="26" r="3.5" ${D}/>
-    <circle cx="22.5" cy="26" r="1.5" ${E}/>
-    <path d="M8,33 H37 L36,39 Q22.5,41 9,39 Z" ${A}/>
-    <path d="M8,33 H37" stroke="${det}" stroke-width="0.8" fill="none"/>
-    <rect x="6" y="39" width="33" height="4.5" rx="2" ${A}/>
-    <rect x="6" y="39" width="33" height="2" rx="2" ${AH}/>
-  `;}
+  // ── HẬU ──
+  else if(t==='Q'){inner=`${base}
+    <path d="M14,40 Q13,27 22.5,22 Q32,27 31,40 Z" ${B}/>
+    <path d="M22.5,22 Q32,27 31,40 L26,40 Q28.5,27 22.5,22 Z" ${S}/>
+    <path d="M14,22 L31,22 L29,15.5 L16,15.5 Z" ${B}/>
+    <path d="M22.5,15.5 L29,15.5 L31,22 L22.5,22 Z" ${S}/>
+    <path d="M16,15.5 L12.5,7.5 L18,12 L22.5,5.5 L27,12 L32.5,7.5 L29,15.5 Z" ${B}/>
+    <circle cx="12.5" cy="7.5" r="2.1" ${M}/>
+    <circle cx="22.5" cy="5.5" r="2.4" ${M}/>
+    <circle cx="32.5" cy="7.5" r="2.1" ${M}/>
+    <rect x="17.5" y="25" width="2.6" height="12" rx="1.2" ${G}/>
+    <circle cx="22.5" cy="19" r="2" ${M}/>`;}
 
-  // ── VƯƠNG (King) ───────────────────────────
-  else if(t==='K'){inner=`
-    ${tex}
-    <rect x="19.5" y="2" width="6" height="14" rx="2" ${A}/>
-    <rect x="14.5" y="5.5" width="16" height="6" rx="2" ${A}/>
-    <rect x="14.5" y="5.5" width="16" height="2.5" rx="2" ${AH}/>
-    <rect x="19.5" y="2" width="6" height="3.5" rx="2" ${AH}/>
-    <circle cx="22.5" cy="5" r="2.5" ${E}/>
-    <rect x="12" y="16" width="21" height="6" rx="2" ${A}/>
-    <rect x="12" y="16" width="21" height="2.5" rx="2" ${AH}/>
-    <path d="M10,22 C12,21 33,21 35,22 L34,34 Q22.5,32.5 11,34 Z" ${A}/>
-    <path d="M10,22 C12,21 33,21 35,22" ${AH}/>
-    <rect x="15" y="26" width="15" height="3" rx="1.5" ${D}/>
-    <path d="M9,34 H36 L35,40 Q22.5,42 10,40 Z" ${A}/>
-    <path d="M9,34 H36" stroke="${det}" stroke-width="0.8" fill="none"/>
-    <rect x="6" y="40" width="33" height="4.5" rx="2" ${A}/>
-    <rect x="6" y="40" width="33" height="2" rx="2" ${AH}/>
-  `;}
+  // ── VƯƠNG ──
+  else if(t==='K'){inner=`${base}
+    <path d="M14,40 Q13,27 22.5,22 Q32,27 31,40 Z" ${B}/>
+    <path d="M22.5,22 Q32,27 31,40 L26,40 Q28.5,27 22.5,22 Z" ${S}/>
+    <path d="M15.5,22 L29.5,22 L28.5,15 L16.5,15 Z" ${B}/>
+    <path d="M22.5,15 L28.5,15 L29.5,22 L22.5,22 Z" ${S}/>
+    <path d="M16.5,15 Q15,8.5 19,10.5 Q20.5,6.5 22.5,6.5 Q24.5,6.5 26,10.5 Q30,8.5 28.5,15 Z" ${B}/>
+    <rect x="21.4" y="1.5" width="2.2" height="6.5" rx="0.8" ${B}/>
+    <rect x="19.3" y="3.3" width="6.4" height="2.2" rx="0.8" ${B}/>
+    <rect x="17.5" y="25" width="2.6" height="12" rx="1.2" ${G}/>
+    <circle cx="22.5" cy="18.6" r="2.1" ${M}/>`;}
 
-  return `<svg viewBox="0 0 45 45" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;filter:drop-shadow(0 3px 6px rgba(0,0,0,.8))">${inner}</svg>`;
+  return `<svg viewBox="0 0 45 45" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;filter:drop-shadow(0 0 3px ${glow}) drop-shadow(0 2px 3px rgba(0,0,0,.55))">${inner}</svg>`;
 }
 
 const CAP_ICONS={P:'♙',N:'♘',B:'♗',R:'♖',Q:'♕',p:'♟',n:'♞',b:'♝',r:'♜',q:'♛'};
 
-// ════ GAME STATE ════
 let board,turn,sel,legal,lastMv,capW,capB,hist,over,ep,cas,half,full;
 function resetState(){
   board=Array.from({length:8},()=>Array(8).fill(null));
@@ -348,7 +494,6 @@ function resetState(){
   for(let c=0;c<8;c++){board[0][c]=bk[c];board[1][c]='p';board[6][c]='P';board[7][c]=wk[c];}
 }
 
-// ════ ENGINE ════
 const isW=p=>p&&p===p.toUpperCase();
 const colOf=p=>p?(isW(p)?'white':'black'):null;
 const opp=c=>c==='white'?'black':'white';
@@ -394,7 +539,6 @@ function applyMv(mv,promo){
   return{mate,draw,check:chk};
 }
 
-// ════ RENDER ════
 function buildBoardDOM(){
   const wrap=document.getElementById('board-wrap');wrap.innerHTML='';
   const flip=myRole==='black';
@@ -446,9 +590,9 @@ function updateStatus(){
 }
 function renderAll(){renderBoard();renderHist();renderCap();updateStatus();}
 
-// ════ INPUT ════
 function canMove(){if(over)return false;if(isDemo)return true;if(myRole==='spectator')return false;return(myRole==='white'&&turn==='white')||(myRole==='black'&&turn==='black');}
 function onSqClick(e){
+  if(_animating)return;
   if(!canMove())return;const tgt=e.currentTarget||e.target?.closest('.sq');if(!tgt)return;
   const r=+tgt.dataset.r,c=+tgt.dataset.c;if(isNaN(r)||isNaN(c))return;
   if(sel){const mv=legal.find(m=>m.to[0]===r&&m.to[1]===c);if(mv){execMove(mv);return;}}
@@ -457,12 +601,85 @@ function onSqClick(e){
   sel=null;legal=[];renderBoard();
 }
 function execMove(mv){const p=board[mv.from[0]][mv.from[1]];const needP=(p==='P'&&mv.to[0]===0)||(p==='p'&&mv.to[0]===7);if(needP){showPromo(p,pr=>{mv.promotion=pr;finishMove(mv);});}else finishMove(mv);}
+/* ── Hiệu ứng di chuyển kiểu anime: lao đi + vệt tàn dư (afterimage) + impact ── */
+let _animating=false;
+const _MOVE_MS=300;                 // thời gian lao (ms). Muốn nhanh/chậm thì đổi số này.
+const _TRAIL=5;                     // số ảnh tàn dư phía sau (afterimage). 0 = tắt vệt.
+
+// Chớp sáng + vòng xung kích + rung bàn cờ tại điểm đáp
+function spawnImpact(cx,cy){
+  const flash=document.createElement('div');
+  flash.style.cssText=`position:fixed;left:${cx}px;top:${cy}px;width:64px;height:64px;border-radius:50%;z-index:5150;pointer-events:none;background:radial-gradient(circle,rgba(255,255,255,.95) 0%,rgba(34,230,255,.6) 35%,transparent 70%);animation:impactFlash .35s ease-out forwards;`;
+  const ring=document.createElement('div');
+  ring.style.cssText=`position:fixed;left:${cx}px;top:${cy}px;border-radius:50%;transform:translate(-50%,-50%);z-index:5200;pointer-events:none;border:3px solid var(--neon1);box-shadow:0 0 18px var(--neon1),0 0 36px var(--neon2);animation:impactRing .45s ease-out forwards;`;
+  document.body.appendChild(flash);document.body.appendChild(ring);
+  setTimeout(()=>{flash.remove();ring.remove();},500);
+  const frame=document.getElementById('board-frame');
+  if(frame){frame.classList.remove('shake');void frame.offsetWidth;frame.classList.add('shake');setTimeout(()=>frame.classList.remove('shake'),320);}
+}
+
+function animateMove(mv,done){
+  const boardEl=document.getElementById('board');
+  if(!boardEl){ done(); return; }
+  // quân chính + quân Xe (khi nhập thành) đều lao
+  const slides=[{from:mv.from,to:mv.to}];
+  const rookMap={'castle-K':[[7,7],[7,5]],'castle-Q':[[7,0],[7,3]],'castle-k':[[0,7],[0,5]],'castle-q':[[0,0],[0,3]]};
+  if(mv.special&&rookMap[mv.special]) slides.push({from:rookMap[mv.special][0],to:rookMap[mv.special][1]});
+
+  const ghosts=[];
+  let mainDest=null;
+  for(const s of slides){
+    const fromSq=boardEl.querySelector(`.sq[data-r="${s.from[0]}"][data-c="${s.from[1]}"]`);
+    const toSq  =boardEl.querySelector(`.sq[data-r="${s.to[0]}"][data-c="${s.to[1]}"]`);
+    if(!fromSq||!toSq) continue;
+    const pw=fromSq.querySelector('.pc-wrap');
+    if(!pw) continue;
+    const fr=fromSq.getBoundingClientRect(), toR=toSq.getBoundingClientRect();
+    const dx=toR.left-fr.left, dy=toR.top-fr.top;
+    if(s===slides[0]) mainDest={x:toR.left+toR.width/2, y:toR.top+toR.height/2};
+
+    // tạo quân chính (i=0) + các ảnh tàn dư (i>0) chạy trễ dần -> vệt anime
+    for(let i=0;i<=_TRAIL;i++){
+      const g=pw.cloneNode(true);
+      const op=i===0?1:(0.5 - i*0.09);
+      const tint=i===0?'':`filter:drop-shadow(0 0 8px var(--neon1)) hue-rotate(${i*10}deg);`;
+      g.style.cssText=`position:fixed;left:${fr.left}px;top:${fr.top}px;width:${fr.width}px;height:${fr.height}px;margin:0;padding:2px;z-index:${5000-i};pointer-events:none;opacity:${Math.max(op,0)};${tint}transition:transform ${_MOVE_MS}ms cubic-bezier(.5,0,.2,1) ${i*26}ms, opacity ${_MOVE_MS}ms linear ${i*26}ms;will-change:transform,opacity;`;
+      g.dataset.dx=dx; g.dataset.dy=dy; g.dataset.i=i;
+      document.body.appendChild(g);
+      ghosts.push(g);
+    }
+    pw.style.opacity='0';            // ẩn quân gốc trong lúc lao
+  }
+  if(ghosts.length===0){ done(); return; }
+
+  _animating=true;
+  requestAnimationFrame(()=>{
+    ghosts.forEach(g=>{
+      g.style.transform=`translate(${g.dataset.dx}px,${g.dataset.dy}px)`;
+      if(+g.dataset.i>0) g.style.opacity='0';   // ảnh tàn dư mờ dần khi lao tới
+    });
+  });
+
+  let fired=false;
+  const finish=()=>{
+    if(fired)return; fired=true;
+    _animating=false;
+    if(mainDest) spawnImpact(mainDest.x,mainDest.y);   // chớp sáng + rung khi đáp
+    done();                         // áp dụng nước đi + vẽ lại bàn cờ
+    ghosts.forEach(g=>g.remove());  // gỡ bóng sau khi đã vẽ -> không bị giật
+  };
+  setTimeout(finish,_MOVE_MS+_TRAIL*26+40);
+}
+
 function finishMove(mv){
-  sel=null;legal=[];const{mate,draw}=applyMv(mv,mv.promotion);renderAll();
-  if(matchRef&&!isDemo){matchRef.child('moves').push({by:myRole,move:JSON.parse(JSON.stringify(mv)),promotion:mv.promotion||null,ts:Date.now()}).catch(e=>console.error('FB:',e));}
-  if(mate)setTimeout(()=>endGame(opp(turn),'Chiếu hết!'),300);
-  else if(draw)setTimeout(()=>endGame(null,'Hết nước — Hoà bàn'),300);
-  else if(half>=100)setTimeout(()=>endGame(null,'Quy tắc 50 nước — Hoà'),300);
+  sel=null;legal=[];
+  animateMove(mv,()=>{
+    const{mate,draw}=applyMv(mv,mv.promotion);renderAll();
+    if(matchRef&&!isDemo){matchRef.child('moves').push({by:myRole,move:JSON.parse(JSON.stringify(mv)),promotion:mv.promotion||null,ts:Date.now()}).catch(e=>console.error('FB:',e));}
+    if(mate)setTimeout(()=>endGame(opp(turn),'Chiếu hết!'),300);
+    else if(draw)setTimeout(()=>endGame(null,'Hết nước — Hoà bàn'),300);
+    else if(half>=100)setTimeout(()=>endGame(null,'Quy tắc 50 nước — Hoà'),300);
+  });
 }
 function showPromo(piece,cb){
   const ov=document.getElementById('promo-ov'),grid=document.getElementById('promo-grid');grid.innerHTML='';
@@ -490,7 +707,7 @@ function initFBSync(){
     const ex=snap.val(),list=ex?Object.values(ex):[];resetState();list.forEach(m=>applyMv(m.move,m.promotion||null));renderAll();
     const keys=ex?Object.keys(ex):[];const last=keys.length>0?keys[keys.length-1]:null;
     const q=last?mvRef.orderByKey().startAfter(last):mvRef.orderByKey();
-    q.on('child_added',snap=>{const d=snap.val();if(d.by===myRole)return;applyMv(d.move,d.promotion||null);renderAll();});
+    q.on('child_added',snap=>{const d=snap.val();if(d.by===myRole)return;animateMove(d.move,()=>{applyMv(d.move,d.promotion||null);renderAll();});});
   });
   matchRef.child('result').on('value',snap=>{const d=snap.val();if(!d||over)return;over=true;showResult(d.winner||null,d.reason,myRole==='spectator');});
   matchRef.child('drawOffer').on('value',snap=>{const d=snap.val();if(!d||d.from===myRole||over)return;if(confirm('🤝 Đối thủ xin hoà. Đồng ý?')){matchRef.child('drawOffer').remove();endGame(null,'Đồng ý hoà bàn');}else{matchRef.child('drawOffer').remove();const btn=document.getElementById('btn-draw');btn.textContent='🤝 Xin hoà';btn.disabled=false;}});
@@ -514,6 +731,153 @@ function initFBSync(){
   else st.textContent=`Lượt 1  ·  ⚫ ${bName} — Chờ đối thủ...`;
   buildBoardDOM();renderAll();initFBSync();
 })();
+
+
+// ═══════════════════════════════════════════════════
+//  BATTLE VIDEO ENGINE
+//  Clips loaded from: ./battles/manifest.json
+//  Admin chỉ cần bỏ clip vào thư mục battles/ trên GitHub
+// ═══════════════════════════════════════════════════
+const PIECE_UNICODE={K:'♔',Q:'♕',R:'♖',B:'♗',N:'♘',P:'♙',k:'♚',q:'♛',r:'♜',b:'♝',n:'♞',p:'♟'};
+const PIECE_NAME={K:'VƯƠNG',Q:'HẬU',R:'XE',B:'TƯỢNG',N:'MÃ',P:'TỐT',k:'VƯƠNG',q:'HẬU',r:'XE',b:'TƯỢNG',n:'MÃ',p:'♟'};
+const BATTLES_BASE='./battles/';
+
+// ═══════════════════════════════════════════
+//  ÂM LƯỢNG CLIP BATTLE (0.0 = tắt tiếng, 1.0 = to nhất)
+//  Để nhỏ -> 0.2 (20%). Muốn nhỏ hơn nữa thì giảm số này.
+// ═══════════════════════════════════════════
+const BATTLE_VOLUME = 0.2;
+// ═══════════════════════════════════════════
+
+let _clips=[];
+let _battleActive=false;
+let _battleCallback=null;
+let _rafId=null;
+
+// ═══════════════════════════════════════════
+//  ADMIN: thêm tên file clip vào đây
+
+// ═══════════════════════════════════════════
+const BATTLE_CLIPS = [
+  'attack.mp4',
+  'attack2.mp4',
+  'attack3.mp4',
+  'attack4.mp4',
+  'attack5.mp4',
+  'attack6.mp4',
+  'attack7.mp4',
+  'attack8.mp4',
+  'attack9.mp4',
+  'attack10.mp4',
+  'attack11.mp4',
+];
+// ═══════════════════════════════════════════
+
+_clips = BATTLE_CLIPS.map(c => BATTLES_BASE + c);
+console.log('[Battle] ' + _clips.length + ' clips loaded');
+
+function playBattleVideo(attackerPiece,defenderPiece,onDone){
+  if(_clips.length===0){onDone();return;}
+  if(_battleActive){onDone();return;}
+  _battleActive=true;
+  _battleCallback=onDone;
+
+  const url=_clips[Math.floor(Math.random()*_clips.length)];
+  const overlay=document.getElementById('battle-video-overlay');
+  const videoEl=document.getElementById('battle-video');
+  const vsEl=document.getElementById('battle-vs');
+  const atkEl=document.getElementById('battle-attacker');
+  const defEl=document.getElementById('battle-defender');
+  const lblAtk=document.getElementById('label-attacker');
+  const lblDef=document.getElementById('label-defender');
+  const progBar=document.getElementById('battle-progress-bar');
+
+  atkEl.textContent=PIECE_UNICODE[attackerPiece]||'⚔';
+  defEl.textContent=PIECE_UNICODE[defenderPiece]||'💀';
+  lblAtk.textContent=PIECE_NAME[attackerPiece]||'';
+  lblDef.textContent=PIECE_NAME[defenderPiece]||'';
+  vsEl.textContent='VS';
+
+  vsEl.style.animation='none';void vsEl.offsetWidth;vsEl.style.animation='';
+  atkEl.style.animation='none';void atkEl.offsetWidth;atkEl.style.animation='';
+  defEl.style.animation='none';void defEl.offsetWidth;defEl.style.animation='';
+  progBar.style.transition='none';
+  progBar.style.width='0%';
+
+  videoEl.src=url;
+  videoEl.currentTime=0;
+  videoEl.volume=BATTLE_VOLUME;       // <-- âm lượng nhỏ
+  overlay.classList.add('active');
+
+  // Phát hết video rồi tự tắt
+  videoEl.oncanplay=()=>{
+    if(!_battleActive)return;
+    videoEl.volume=BATTLE_VOLUME;     // đặt lại cho chắc chắn sau khi load
+    videoEl.play().catch(()=>{});
+    // Progress bar chạy theo thời lượng thật của video
+    function tick(){
+      if(!_battleActive||videoEl.paused||videoEl.ended)return;
+      const pct=videoEl.duration>0?(videoEl.currentTime/videoEl.duration)*100:0;
+      progBar.style.width=pct+'%';
+      _rafId=requestAnimationFrame(tick);
+    }
+    _rafId=requestAnimationFrame(tick);
+  };
+
+  // Tự tắt khi video kết thúc
+  videoEl.onended=()=>endBattle();
+  // Fallback nếu video lỗi
+  videoEl.onerror=()=>endBattle();
+}
+
+function endBattle(){
+  if(!_battleActive)return;
+  _battleActive=false;
+  if(_rafId){cancelAnimationFrame(_rafId);_rafId=null;}
+  const overlay=document.getElementById('battle-video-overlay');
+  const videoEl=document.getElementById('battle-video');
+  overlay.classList.remove('active');
+  videoEl.pause();
+  videoEl.src='';
+  videoEl.oncanplay=null;
+  if(_battleCallback){
+    const cb=_battleCallback;
+    _battleCallback=null;
+    setTimeout(cb,80);
+  }
+}
+
+function skipBattle(){endBattle();}
+
+const __origExecMove=execMove;
+execMove=function(mv){
+  const p=board[mv.from[0]][mv.from[1]];
+  const target=board[mv.to[0]][mv.to[1]];
+  const isEP=p&&p.toUpperCase()==='P'&&mv.from[1]!==mv.to[1]&&!board[mv.to[0]][mv.to[1]];
+  const epTarget=isEP?board[mv.from[0]][mv.to[1]]:null;
+  const defender=target||epTarget;
+  const needP=(p==='P'&&mv.to[0]===0)||(p==='p'&&mv.to[0]===7);
+  if(defender&&_clips.length>0){
+    if(needP){showPromo(p,pr=>{mv.promotion=pr;playBattleVideo(p,defender,()=>finishMove(mv));});}
+    else{playBattleVideo(p,defender,()=>finishMove(mv));}
+  }else{
+    __origExecMove(mv);
+  }
+};
+
 </script>
+
+<!-- BATTLE VIDEO OVERLAY -->
+<div id="battle-video-overlay">
+  <video id="battle-video" playsinline webkit-playsinline preload="auto"></video>
+  <div id="battle-vs"></div>
+  <div id="battle-attacker"></div>
+  <div id="battle-defender"></div>
+  <div class="fighter-label" id="label-attacker"></div>
+  <div class="fighter-label" id="label-defender"></div>
+  <div id="battle-progress"><div id="battle-progress-bar"></div></div>
+  <button id="battle-skip" onclick="skipBattle()">bỏ qua ▶</button>
+</div>
+
 </body>
 </html>
