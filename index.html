@@ -70,9 +70,7 @@ main{display:flex;align-items:flex-start;justify-content:center;gap:20px;padding
     0 0 60px rgba(255,45,85,.18),
     0 20px 80px rgba(0,0,0,.9);
   position:relative;
-  animation:framePulse 3.2s ease-in-out infinite;
 }
-@keyframes framePulse{50%{box-shadow:inset 0 0 0 1px rgba(34,230,255,.75),inset 0 0 26px rgba(34,230,255,.28),0 0 0 1px rgba(255,45,85,.5),0 0 34px rgba(34,230,255,.55),0 0 80px rgba(255,45,85,.3),0 20px 80px rgba(0,0,0,.9)}}
 #board-frame::before{content:'⚡';position:absolute;top:-10px;left:-10px;color:var(--neon1);font-size:16px;text-shadow:0 0 10px var(--neon1),0 0 20px var(--neon1)}
 #board-frame::after{content:'⚡';position:absolute;bottom:-10px;right:-10px;color:var(--neon2);font-size:16px;text-shadow:0 0 10px var(--neon2),0 0 20px var(--neon2)}
 #board{
@@ -102,7 +100,7 @@ main{display:flex;align-items:flex-start;justify-content:center;gap:20px;padding
 .sq.light.can-mv::after{background:rgba(20,120,180,.55);box-shadow:0 0 8px rgba(34,230,255,.6)}
 .sq.dark.can-mv::after{background:rgba(34,230,255,.65);box-shadow:0 0 10px rgba(34,230,255,.85)}
 .sq.can-cap::before{content:'';position:absolute;inset:4px;border-radius:50%;border:4px solid rgba(255,45,85,.8);box-shadow:0 0 12px rgba(255,45,85,.7),inset 0 0 10px rgba(255,45,85,.5);z-index:2;pointer-events:none}
-.pc-wrap{width:var(--sq);height:var(--sq);display:flex;align-items:center;justify-content:center;pointer-events:none;padding:2px;position:relative;z-index:3;filter:drop-shadow(0 0 3px rgba(34,230,255,.3))}
+.pc-wrap{width:var(--sq);height:var(--sq);display:flex;align-items:center;justify-content:center;pointer-events:none;padding:2px;position:relative;z-index:3}
 #result-ov{display:none;position:fixed;inset:0;background:rgba(5,4,3,.9);z-index:9000;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
 #result-ov.show{display:flex}
 .res-box{background:linear-gradient(160deg,#0e1a30,#070d1a);border:1px solid var(--bdr2);border-radius:18px;padding:40px 48px;text-align:center;width:90%;max-width:380px;box-shadow:0 0 0 1px var(--gold2),0 0 40px rgba(34,230,255,.25),0 30px 80px rgba(0,0,0,.9);animation:popIn .4s cubic-bezier(.34,1.56,.64,1)}
@@ -393,7 +391,7 @@ const betAmt=parseInt(P.get('bet')||'0');
 const wName=P.get('white')||'Người Chơi 1';
 const bName=P.get('black')||'Người Chơi 2';
 const isDemo=!P.get('role');
-const FB_CFG={apiKey:"YOUR_API_KEY",authDomain:"YOUR_PROJECT.firebaseapp.com",databaseURL:"https://YOUR_PROJECT-default-rtdb.firebaseio.com",projectId:"YOUR_PROJECT_ID",storageBucket:"YOUR_PROJECT.appspot.com",messagingSenderId:"YOUR_SENDER_ID",appId:"YOUR_APP_ID"};
+const FB_CFG={apiKey:"AIzaSyBycNYK9YKpbXql8jQqk-m2p1gmXLRj4Qg",authDomain:"tobi-chess.firebaseapp.com",databaseURL:"https://tobi-chess-default-rtdb.firebaseio.com",projectId:"tobi-chess",storageBucket:"tobi-chess.firebasestorage.app",messagingSenderId:"1068822819314",appId:"1:1068822819314:web:a8800188d48b30d2a8bb6b",measurementId:"G-TGK7J4S7GR"};
 let matchRef=null;
 if(!isDemo){firebase.initializeApp(FB_CFG);matchRef=firebase.database().ref('chess/'+matchId);}
 
@@ -480,7 +478,7 @@ function makePieceSVG(piece){
     <rect x="17.5" y="25" width="2.6" height="12" rx="1.2" ${G}/>
     <circle cx="22.5" cy="18.6" r="2.1" ${M}/>`;}
 
-  return `<svg viewBox="0 0 45 45" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;filter:drop-shadow(0 0 3px ${glow}) drop-shadow(0 2px 3px rgba(0,0,0,.55))">${inner}</svg>`;
+  return `<svg viewBox="0 0 45 45" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;filter:drop-shadow(0 1px 2px ${glow})">${inner}</svg>`;
 }
 
 const CAP_ICONS={P:'♙',N:'♘',B:'♗',R:'♖',Q:'♕',p:'♟',n:'♞',b:'♝',r:'♜',q:'♛'};
@@ -604,7 +602,7 @@ function execMove(mv){const p=board[mv.from[0]][mv.from[1]];const needP=(p==='P'
 /* ── Hiệu ứng di chuyển kiểu anime: lao đi + vệt tàn dư (afterimage) + impact ── */
 let _animating=false;
 const _MOVE_MS=300;                 // thời gian lao (ms). Muốn nhanh/chậm thì đổi số này.
-const _TRAIL=5;                     // số ảnh tàn dư phía sau (afterimage). 0 = tắt vệt.
+const _TRAIL=3;                     // số ảnh tàn dư phía sau (afterimage). 0 = tắt vệt.
 
 // Chớp sáng + vòng xung kích + rung bàn cờ tại điểm đáp
 function spawnImpact(cx,cy){
@@ -642,7 +640,7 @@ function animateMove(mv,done){
     for(let i=0;i<=_TRAIL;i++){
       const g=pw.cloneNode(true);
       const op=i===0?1:(0.5 - i*0.09);
-      const tint=i===0?'':`filter:drop-shadow(0 0 8px var(--neon1)) hue-rotate(${i*10}deg);`;
+      const tint=i===0?'':`opacity:${op};`;
       g.style.cssText=`position:fixed;left:${fr.left}px;top:${fr.top}px;width:${fr.width}px;height:${fr.height}px;margin:0;padding:2px;z-index:${5000-i};pointer-events:none;opacity:${Math.max(op,0)};${tint}transition:transform ${_MOVE_MS}ms cubic-bezier(.5,0,.2,1) ${i*26}ms, opacity ${_MOVE_MS}ms linear ${i*26}ms;will-change:transform,opacity;`;
       g.dataset.dx=dx; g.dataset.dy=dy; g.dataset.i=i;
       document.body.appendChild(g);
@@ -756,24 +754,17 @@ let _rafId=null;
 
 // ═══════════════════════════════════════════
 //  ADMIN: thêm tên file clip vào đây
-
+//  Ví dụ: ['clip1.mp4', 'naruto.mp4', 'dbz.mp4']
 // ═══════════════════════════════════════════
 const BATTLE_CLIPS = [
-  'attack.mp4',
-  'attack2.mp4',
-  'attack3.mp4',
-  'attack4.mp4',
-  'attack5.mp4',
-  'attack6.mp4',
-  'attack7.mp4',
-  'attack8.mp4',
-  'attack9.mp4',
-  'attack10.mp4',
-  'attack11.mp4',
+  'attack.mp4',  'attack2.mp4', 'attack3.mp4', 'attack4.mp4',
+  'attack5.mp4', 'attack6.mp4', 'attack7.mp4', 'attack8.mp4',
+  'attack9.mp4', 'attack10.mp4','attack11.mp4',
 ];
 // ═══════════════════════════════════════════
 
-_clips = BATTLE_CLIPS.map(c => BATTLES_BASE + c);
+// Chấp nhận cả link đầy đủ (http...) lẫn tên file trong thư mục battles/
+_clips = BATTLE_CLIPS.map(c => /^https?:\/\//.test(c) ? c : BATTLES_BASE + c);
 console.log('[Battle] ' + _clips.length + ' clips loaded');
 
 function playBattleVideo(attackerPiece,defenderPiece,onDone){
