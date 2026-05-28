@@ -669,11 +669,18 @@ function animateMove(mv,done){
   setTimeout(finish,_MOVE_MS+_TRAIL*26+40);
 }
 
+// Gửi nước đi lên Firebase. Gọi được nhiều lần — chỉ gửi 1 lần (tránh trùng).
+function sendMove(mv){
+  if(!matchRef||isDemo||mv._sent)return;
+  mv._sent=true;
+  const payload={from:mv.from,to:mv.to,special:mv.special||null};
+  matchRef.child('moves').push({by:myRole,move:payload,promotion:mv.promotion||null,ts:Date.now()}).catch(e=>console.error('FB:',e));
+}
 function finishMove(mv){
   sel=null;legal=[];
   animateMove(mv,()=>{
     const{mate,draw}=applyMv(mv,mv.promotion);renderAll();
-    if(matchRef&&!isDemo){matchRef.child('moves').push({by:myRole,move:JSON.parse(JSON.stringify(mv)),promotion:mv.promotion||null,ts:Date.now()}).catch(e=>console.error('FB:',e));}
+    sendMove(mv);   // nếu đã gửi sớm (nước ăn quân) thì bỏ qua
     if(mate)setTimeout(()=>endGame(opp(turn),'Chiếu hết!'),300);
     else if(draw)setTimeout(()=>endGame(null,'Hết nước — Hoà bàn'),300);
     else if(half>=100)setTimeout(()=>endGame(null,'Quy tắc 50 nước — Hoà'),300);
@@ -867,8 +874,8 @@ execMove=function(mv){
   const needP=(p==='P'&&mv.to[0]===0)||(p==='p'&&mv.to[0]===7);
   if(defender&&_clips.length>0){
     const ci=(capW.length+capB.length)%_clips.length;  // clip tuần tự theo số lần ăn quân (đồng bộ sẵn)
-    if(needP){showPromo(p,pr=>{mv.promotion=pr;playBattleVideo(p,defender,()=>finishMove(mv),ci);});}
-    else{playBattleVideo(p,defender,()=>finishMove(mv),ci);}
+    if(needP){showPromo(p,pr=>{mv.promotion=pr;sendMove(mv);playBattleVideo(p,defender,()=>finishMove(mv),ci);});}
+    else{sendMove(mv);playBattleVideo(p,defender,()=>finishMove(mv),ci);}  // gửi NGAY rồi mới chiếu -> 2 bên chiếu cùng lúc
   }else{
     __origExecMove(mv);
   }
